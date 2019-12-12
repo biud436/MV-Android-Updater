@@ -132,6 +132,13 @@ let utils = {
                         case 0: // 압축 해제 성공 시
                             $(".ui.text.loader").text("Successed to uncompress...");                            
                             $(".ui.text.loader").hide();
+
+                            window.resolveLocalFileSystemURL(fileUri, entry => {
+                                entry.remove(() => {
+                                    console.log("Removed the file called zip file");
+                                }, this.errorCallback);
+                            }, this.errorCallback);
+
                             window.open(`cdvfile://localhost/persistent/${packageName}/downloads/test/index.html`, "_self");
                             break;
                         default: // 압축 해제 실패
