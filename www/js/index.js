@@ -194,7 +194,10 @@ let app = {
                 // 해당 위치에 파일이 있으면 실행한다 => fs.existSync(indexFileUri)와 비슷
                 entry.file(file => {
                     window.open(indexFileUri, "_self");                   
-                }, errorCallback);
+                }, err => { 
+                    // 파일이 없을 경우, 다시 다운로드 한다.
+                    utils.testDownloadZip();
+                });
 
         }, errorCallback);
 
