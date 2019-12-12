@@ -124,7 +124,7 @@ let utils = {
                 console.log("download complete: " + entry.toURL());
 
                 let zipPath = fileUri;
-                let extractDir = `cdvfile://localhost/persistent/${packageName}/downloads/test/`;
+                let extractDir = `cdvfile://localhost/persistent/${packageName}/www/`;
 
                 // 파일의 압축을 해제한다.
                 window.zip.unzip(zipPath, extractDir, status => {
@@ -133,13 +133,15 @@ let utils = {
                             $(".ui.text.loader").text("Successed to uncompress...");                            
                             $(".ui.text.loader").hide();
 
-                            window.resolveLocalFileSystemURL(fileUri, entry => {
-                                entry.remove(() => {
-                                    console.log("Removed the file called zip file");
+                            window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, (fs) => {
+                                fs.root.getDirectory(`${config.packageName}/downloads/`, {create:true, exclusive:false}, dirEntry => {
+                                    dirEntry.removeRecursively(() => {
+                                        console.log("Removed the resource file from downloads folder");
+                                        window.open(`cdvfile://localhost/persistent/${packageName}/www/index.html`, "_self");
+                                    }, this.errorCallback);
                                 }, this.errorCallback);
                             }, this.errorCallback);
 
-                            window.open(`cdvfile://localhost/persistent/${packageName}/downloads/test/index.html`, "_self");
                             break;
                         default: // 압축 해제 실패
                             console.log("Failed to uncompress...");
@@ -181,7 +183,7 @@ let app = {
             utils.testDownloadZip();
         };
 
-        let indexFileUri = `cdvfile://localhost/persistent/${config.packageName}/downloads/test/index.html`;
+        let indexFileUri = `cdvfile://localhost/persistent/${config.packageName}/www/index.html`;
         window.resolveLocalFileSystemURL(indexFileUri, 
 
             /**
