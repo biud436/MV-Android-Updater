@@ -208,7 +208,12 @@ let app = {
             dataType: "JSON",
             success: (data) => {
 
-                let currentVersion = data.version;
+                let tempVersion = localStorage.getItem("version");
+                if(!tempVersion) {
+                    localStorage.setItem("version", data.version);
+                    tempVersion = data.version;
+                }
+                let currentVersion = tempVersion;
 
                 document.title = `${data.title} v${currentVersion}`;
                 
