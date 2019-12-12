@@ -7,6 +7,5 @@ let config = {
     version : {
         "url" : "https://www.dropbox.com/s/j5323z8kv1ln13t/VERSION.txt?dl=1",
         "fileUrl" : `cdvfile://localhost/persistent/{packageName}/VERSION.txt`
-    },
-
+    }
 };

@@ -9,4 +9,20 @@ RPG Maker MV로 안드로이드 앱을 만들었을 때 저용량 앱을 만들�
 버전 텍스트는 ```settings.json``` 파일에 존재하지만 초기 로드 이후 ```localStorage```에 저장됩니다. 즉, 캐시를 비울 시엔 ```settings.json``` 파일에 있는 버전이 기본 버전이 되고 캐시가 남아있으면 ```localStorage```에 있는 버전을 활용합니다. 
 
 ## 리소스 파일
-리소스 파일은 ZIP로 압축된 파일이여야 합니다. 다른 압축 파일은 압축 해제를 지원하지 않습니다. 압축은 ```js/config.js```의 ```name```명에 해당하는 폴더를 루트 폴더로 삼아 압축이 풀리게 됩니다. 예를 들어 ```name``` 키를 ```me.biud436.fileapi```로 설정했다면 ```sdcard/me.biud436.fileapi/www/``` 폴더에 압축이 풀리게 됩니다. 게임 종료 후, 두 번째 실행할 땐, 리소스 파일이 있는 지를 확인한 후, 실행됩니다. 파일이 없을 경우, 다시 리소스 다운로드를 진행합니다.
+리소스 파일은 ZIP로 압축된 파일이여야 합니다. 다른 압축 파일은 압축 해제를 지원하지 않습니다. 압축은 ```js/config.js```의 ```name```명에 해당하는 폴더를 루트 폴더로 삼아 압축이 풀리게 됩니다. 예를 들어 ```name``` 키를 ```me.biud436.fileapi```로 설정했다면 ```sdcard/me.biud436.fileapi/www/``` 폴더에 압축이 풀리게 됩니다. 게임 종료 후, 두 번째 실행할 땐, 리소스 파일이 있는 지를 확인한 후, 실행됩니다. 파일이 없을 경우, 다시 리소스 다운로드를 진행합니다. ```{packageName}``` 텍스트는 이후 ```packageName```으로 자동 대체됩니다. 별도로 바꾸시면 오류가 날 수 있습니다.
+
+```js
+let config = {
+    packageName : "me.biud436.fileapi",    
+    resource : {
+        "url" : "https://www.dropbox.com/s/g6yfac905flmna6/Simplify.zip?dl=1",
+        "fileUrl" : `cdvfile://localhost/persistent/{packageName}/downloads/Simplify.zip`
+    },
+    version : {
+        "url" : "https://www.dropbox.com/s/j5323z8kv1ln13t/VERSION.txt?dl=1",
+        "fileUrl" : `cdvfile://localhost/persistent/{packageName}/VERSION.txt`
+    }
+};
+```
+
+CORS 문제로 인하여 버전 텍스트는 AJAX를 사용하지 않고 로컬에 직접 내려 받게 됩니다. 이때 저장되는 파일의 위치가 ```config.version.fileUrl```입니다. ```cdvfile://localhost/persistent/```는 코르도바 파일 플러그인에서 제공되는 로컬 URI 서비스로 기종마다 다르지만, 보통 안드로이드에서는 파일 권한이 있어야 접근할 수 있는 ```/storage/emulated/0``` 폴더를 나타냅니다. 따라서 버전 텍스트는 ```/storage/emulated/0/me.biud436.fileapi/VERSION.txt```와 같은 경로에 저장됩니다. 최종 경로는 기종마다 달라질 수 있습니다.
