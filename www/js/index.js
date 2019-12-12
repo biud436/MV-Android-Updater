@@ -49,13 +49,6 @@ let utils = {
                             }, this.errorCallback);
                         }
                     , this.errorCallback);
-
-                    // 폴더 및 그 내용 그리고 포함된 하위 폴더까지 모두 삭제
-                    fs.root.getDirectory(packageName, {create:true, exclusive:false}, dirEntry => {
-                        dirEntry.removeRecursively(() => {
-                            console.log(`succuessed to remove a folder called ${packageName}`);
-                        }, this.errorCallback);
-                    }, this.errorCallback);
                     
                     // 끝
 
@@ -74,7 +67,7 @@ let utils = {
 
     checkVersion(callback) {
         let uri = encodeURI(config.version.url);
-        let fileUri = config.version.fileUrl;
+        let fileUri = config.version.fileUrl.replace("{packageName}", config.packageName);
 
         let fileTransfer = new FileTransfer();
 
@@ -114,7 +107,7 @@ let utils = {
         
         let fileTransfer = new FileTransfer();
         let uri = encodeURI(config.resource.url);
-        let fileUri = config.resource.fileUrl;
+        let fileUri = config.resource.fileUrl.replace("{packageName}", config.packageName);
         const packageName = config.packageName;
 
         fileTransfer.onprogress = function(progressEvent) {
